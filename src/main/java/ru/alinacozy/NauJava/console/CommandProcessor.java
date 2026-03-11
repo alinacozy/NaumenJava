@@ -1,4 +1,4 @@
-package ru.alinacozy.NauJava;
+package ru.alinacozy.NauJava.console;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
