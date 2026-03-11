@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +18,20 @@ import ru.alinacozy.NauJava.entity.Floss;
 @Configuration
 public class Config
 {
+
+    @Value("${app.name}")
+    private String appName;
+
+    @Value("${app.version}")
+    private String appVersion;
+
+    @PostConstruct
+    public void init() {
+        System.out.println("======================================");
+        System.out.println("        Приложение: " + appName);
+        System.out.println("        Версия: " + appVersion);
+        System.out.println("======================================");
+    }
 
     @Bean
     @Scope(value = BeanDefinition.SCOPE_SINGLETON)
@@ -124,9 +140,6 @@ public class Config
     public CommandLineRunner commandScanner(CommandProcessor commandProcessor) {
         return args -> {
             try (Scanner scanner = new Scanner(System.in)) {
-                System.out.println("======================================");
-                System.out.println("        Каталог ниток (мулине)");
-                System.out.println("======================================");
                 System.out.println("Введите команду. 'help' для списка команд, 'exit' для выхода.\n");
 
                 while (true) {
