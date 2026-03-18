@@ -11,7 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import ru.alinacozy.NauJava.console.CommandProcessor;
+//import ru.alinacozy.NauJava.console.CommandProcessor;
 import ru.alinacozy.NauJava.entity.Floss;
 
 @Configuration
@@ -135,38 +135,38 @@ public class Config
         return database;
     }
 
-    @Bean
-    public CommandLineRunner commandScanner(CommandProcessor commandProcessor) {
-        return args -> {
-            try (Scanner scanner = new Scanner(System.in)) {
-                System.out.println("Введите команду. 'help' для списка команд, 'exit' для выхода.\n");
-
-                while (true) {
-                    // Показать приглашение для ввода
-                    System.out.print("> ");
-                    String input = scanner.nextLine();
-
-                    // Выход из цикла, если введена команда "exit"
-                    if ("exit".equalsIgnoreCase(input.trim())) {
-                        System.out.println("Выход из программы...");
-                        break;
-                    }
-
-                    // Пропускаем пустые строки
-                    if (input.trim().isEmpty()) {
-                        continue;
-                    }
-
-                    // Обработка команды
-                    try {
-                        commandProcessor.processCommand(input);
-                    } catch (Exception e) {
-                        System.out.println("Ошибка: " + e.getMessage());
-                    }
-
-                    System.out.println(); // Пустая строка для читаемости
-                }
-            }
-        };
-    }
+//    @Bean
+//    public CommandLineRunner commandScanner(CommandProcessor commandProcessor) {
+//        return args -> {
+//            try (Scanner scanner = new Scanner(System.in)) {
+//                System.out.println("Введите команду. 'help' для списка команд, 'exit' для выхода.\n");
+//
+//                while (true) {
+//                    // Показать приглашение для ввода
+//                    System.out.print("> ");
+//                    String input = scanner.nextLine();
+//
+//                    // Выход из цикла, если введена команда "exit"
+//                    if ("exit".equalsIgnoreCase(input.trim())) {
+//                        System.out.println("Выход из программы...");
+//                        break;
+//                    }
+//
+//                    // Пропускаем пустые строки
+//                    if (input.trim().isEmpty()) {
+//                        continue;
+//                    }
+//
+//                    // Обработка команды
+//                    try {
+//                        commandProcessor.processCommand(input);
+//                    } catch (Exception e) {
+//                        System.out.println("Ошибка: " + e.getMessage());
+//                    }
+//
+//                    System.out.println(); // Пустая строка для читаемости
+//                }
+//            }
+//        };
+//    }
 }

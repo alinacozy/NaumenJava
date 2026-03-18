@@ -2,6 +2,7 @@ package ru.alinacozy.NauJava.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.alinacozy.NauJava.entity.Floss;
 import ru.alinacozy.NauJava.repository.FlossRepository;
 
@@ -20,6 +21,7 @@ public class FlossServiceImpl implements FlossService{
     }
 
     @Override
+    @Transactional
     public void createFloss(String brand, String number, String colorName, String colorGroup, int red, int green, int blue) {
         if (brand == null || number == null || colorName == null || colorGroup == null) {
             throw new IllegalArgumentException("Brand, number, colorName and colorGroup cannot be null");
@@ -28,33 +30,45 @@ public class FlossServiceImpl implements FlossService{
         if (red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255) {
             throw new IllegalArgumentException("RGB values must be from 0 to 255");
         }
-        Floss newFloss=new Floss(brand, number, colorName, colorGroup, red, green, blue);
-        flossRepository.create(newFloss);
+
+        // Проверяем, нет ли уже такой нитки
+        if (flossRepository.findByBrandAndColorNumber(brand, number).isPresent()) {
+            throw new IllegalArgumentException("Floss with brand " + brand + " and number " + number + " already exists");
+        }
+
+        Floss newFloss = new Floss(brand, number, colorName, colorGroup, red, green, blue);
+        flossRepository.save(newFloss);
     }
 
     @Override
     public Floss findByBrandAndNumber(String brand, String number) {
-        return flossRepository.findByBrandAndNumber(brand, number);
+        return flossRepository.findByBrandAndColorNumber(brand, number)
+                .orElse(null);
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
-        flossRepository.delete(id);
-    }
-
-    @Override
-    public void updateRGB(Long id, int red, int green, int blue) {
-        Floss floss=flossRepository.read(id);
-        if (floss == null) {
+        if (!flossRepository.existsById(id)) {
             throw new IllegalArgumentException("Floss with id " + id + " not found");
         }
+        flossRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void updateRGB(Long id, int red, int green, int blue) {
+        Floss floss = flossRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Floss with id " + id + " not found"));
+
         if (red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255) {
             throw new IllegalArgumentException("RGB values must be from 0 to 255");
         }
+
         floss.setRed(red);
         floss.setGreen(green);
         floss.setBlue(blue);
-        flossRepository.update(floss);
+        flossRepository.save(floss);
     }
 
     @Override
@@ -62,17 +76,23 @@ public class FlossServiceImpl implements FlossService{
         if (red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255) {
             throw new IllegalArgumentException("RGB values must be from 0 to 255");
         }
-        List<Floss> candidates = flossRepository.findAll();
 
+        // Сначала ищем точное совпадение
+        List<Floss> exactMatches = flossRepository.findByRedAndGreenAndBlue(red, green, blue);
+        if (!exactMatches.isEmpty()) {
+            return exactMatches.get(0);
+        }
+
+        // Если точного нет, ищем ближайший
+        List<Floss> candidates = flossRepository.findAll();
         return findClosestByColor(red, green, blue, candidates);
     }
 
     @Override
     public Floss findSimilar(String brand, String number) {
-        Floss original =flossRepository.findByBrandAndNumber(brand, number);
-        if (original == null){
-            throw new IllegalArgumentException("Floss with selected brand and number not found");
-        }
+        Floss original = flossRepository.findByBrandAndColorNumber(brand, number)
+                .orElseThrow(() -> new IllegalArgumentException("Floss with brand " + brand + " and number " + number + " not found"));
+
         List<Floss> candidates = flossRepository.findAll().stream()
                 .filter(f -> !f.getId().equals(original.getId()))  // исключаем исходную
                 .collect(Collectors.toList());
