@@ -1,10 +1,12 @@
 package ru.alinacozy.NauJava.repository;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import ru.alinacozy.NauJava.entity.Inventory;
 import java.util.List;
 import java.util.Optional;
 
+@RepositoryRestResource(path = "inventory")
 public interface InventoryRepository extends CrudRepository<Inventory, Long> {
 
     /**

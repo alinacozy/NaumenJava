@@ -1,5 +1,6 @@
 package ru.alinacozy.NauJava.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 
@@ -18,6 +19,7 @@ public class RequiredFloss {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "project_id", nullable = false)
+    @JsonBackReference
     private Project project;
 
     @ManyToOne(optional = true)
