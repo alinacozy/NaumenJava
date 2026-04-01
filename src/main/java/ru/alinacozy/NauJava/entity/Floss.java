@@ -39,6 +39,14 @@ public class Floss {
 
     // Конструктор с ID
     public Floss(Long id, String brand, String colorNumber, String colorName, String colorGroup, Integer red, Integer green, Integer blue) {
+        if (id == null || brand == null || colorNumber == null || colorName == null || colorGroup == null) {
+            throw new IllegalArgumentException("Brand, number, colorName and colorGroup cannot be null");
+        }
+        // Проверка RGB (0-255)
+        if (red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255) {
+            throw new IllegalArgumentException("RGB values must be from 0 to 255");
+        }
+
         this.id = id;
         this.brand = brand;
         this.colorNumber = colorNumber;
@@ -51,6 +59,14 @@ public class Floss {
 
     // Конструктор без ID
     public Floss(String brand, String colorNumber, String colorName, String colorGroup, Integer red, Integer green, Integer blue) {
+        if (brand == null || colorNumber == null || colorName == null || colorGroup == null) {
+            throw new IllegalArgumentException("Brand, number, colorName and colorGroup cannot be null");
+        }
+        // Проверка RGB (0-255)
+        if (red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255) {
+            throw new IllegalArgumentException("RGB values must be from 0 to 255");
+        }
+
         this.brand = brand;
         this.colorNumber = colorNumber;
         this.colorName = colorName;
@@ -106,6 +122,9 @@ public class Floss {
     }
 
     public void setRed(Integer red) {
+        if (red < 0 || red > 255) {
+            throw new IllegalArgumentException("RGB values must be from 0 to 255");
+        }
         this.red = red;
     }
 
@@ -114,6 +133,9 @@ public class Floss {
     }
 
     public void setGreen(Integer green) {
+        if (green < 0 || green > 255) {
+            throw new IllegalArgumentException("RGB values must be from 0 to 255");
+        }
         this.green = green;
     }
 
@@ -122,6 +144,9 @@ public class Floss {
     }
 
     public void setBlue(Integer blue) {
+        if (blue < 0 || blue > 255) {
+            throw new IllegalArgumentException("RGB values must be from 0 to 255");
+        }
         this.blue = blue;
     }
 

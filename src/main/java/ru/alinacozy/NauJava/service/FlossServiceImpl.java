@@ -23,14 +23,6 @@ public class FlossServiceImpl implements FlossService{
     @Override
     @Transactional
     public void createFloss(String brand, String number, String colorName, String colorGroup, int red, int green, int blue) {
-        if (brand == null || number == null || colorName == null || colorGroup == null) {
-            throw new IllegalArgumentException("Brand, number, colorName and colorGroup cannot be null");
-        }
-        // Проверка RGB (0-255)
-        if (red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255) {
-            throw new IllegalArgumentException("RGB values must be from 0 to 255");
-        }
-
         // Проверяем, нет ли уже такой нитки
         if (flossRepository.findByBrandAndColorNumber(brand, number).isPresent()) {
             throw new IllegalArgumentException("Floss with brand " + brand + " and number " + number + " already exists");
@@ -61,10 +53,6 @@ public class FlossServiceImpl implements FlossService{
         Floss floss = flossRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Floss with id " + id + " not found"));
 
-        if (red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255) {
-            throw new IllegalArgumentException("RGB values must be from 0 to 255");
-        }
-
         floss.setRed(red);
         floss.setGreen(green);
         floss.setBlue(blue);
@@ -80,7 +68,7 @@ public class FlossServiceImpl implements FlossService{
         // Сначала ищем точное совпадение
         List<Floss> exactMatches = flossRepository.findByRedAndGreenAndBlue(red, green, blue);
         if (!exactMatches.isEmpty()) {
-            return exactMatches.get(0);
+            return exactMatches.getFirst();
         }
 
         // Если точного нет, ищем ближайший
