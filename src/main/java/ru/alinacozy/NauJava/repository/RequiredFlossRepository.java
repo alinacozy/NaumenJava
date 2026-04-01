@@ -1,9 +1,11 @@
 package ru.alinacozy.NauJava.repository;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import ru.alinacozy.NauJava.entity.RequiredFloss;
 import java.util.List;
 
+@RepositoryRestResource(path = "required-flosses")
 public interface RequiredFlossRepository extends CrudRepository<RequiredFloss, Long> {
 
     /**

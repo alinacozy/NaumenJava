@@ -3,9 +3,11 @@ package ru.alinacozy.NauJava.repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import ru.alinacozy.NauJava.entity.Project;
 import java.util.List;
 
+@RepositoryRestResource(path = "projects")
 public interface ProjectRepository extends CrudRepository<Project, Long> {
 
     /**

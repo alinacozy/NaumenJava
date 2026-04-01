@@ -1,5 +1,7 @@
 package ru.alinacozy.NauJava.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ public class Project {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private User user;
 
     @Column(columnDefinition = "TEXT")
@@ -37,6 +40,7 @@ public class Project {
     private String patternSrc;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<RequiredFloss> requiredFlosses;
 
     // Constructors

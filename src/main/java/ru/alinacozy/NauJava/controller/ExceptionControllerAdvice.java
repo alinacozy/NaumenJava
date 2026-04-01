@@ -1,0 +1,48 @@
+package ru.alinacozy.NauJava.controller;
+
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import ru.alinacozy.NauJava.dto.ExceptionDTO;
+
+@ControllerAdvice
+public class ExceptionControllerAdvice
+{
+    @ExceptionHandler(java.lang.Exception.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ExceptionDTO exception(java.lang.Exception e)
+    {
+        return ExceptionDTO.create(500, "Непредвиденная ошибка на сервере");
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ExceptionDTO exception(ResourceNotFoundException e)
+    {
+        return ExceptionDTO.create(404, "Запрашиваемый ресурс не существует в системе");
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionDTO exception(IllegalArgumentException e)
+    {
+        return ExceptionDTO.create(400, "Неверные параметры запроса. " + e.getMessage());
+    }
+
+    @ExceptionHandler(org.springframework.web.servlet.NoHandlerFoundException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ExceptionDTO handleNoHandlerFound(org.springframework.web.servlet.NoHandlerFoundException e) {
+        return ExceptionDTO.create(404, "Страница не найдена. Проверьте правильность URL: " + e.getRequestURL());
+    }
+
+}
+
