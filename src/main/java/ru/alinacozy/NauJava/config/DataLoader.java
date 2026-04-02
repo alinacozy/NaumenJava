@@ -2,6 +2,7 @@ package ru.alinacozy.NauJava.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.alinacozy.NauJava.entity.*;
 import ru.alinacozy.NauJava.repository.*;
@@ -27,6 +28,9 @@ public class DataLoader implements CommandLineRunner {
     @Autowired
     private RequiredFlossRepository requiredFlossRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public void run(String... args) throws Exception {
 
@@ -44,8 +48,8 @@ public class DataLoader implements CommandLineRunner {
         System.out.println("База данных пуста. Загрузка тестовых данных...");
 
         // Пользователи
-        User user1 = new User("alinacozy", "admin");
-        User user2 = new User("john_doe", "user");
+        User user1 = new User("alinacozy", passwordEncoder.encode("123"), Role.ADMIN);
+        User user2 = new User("john_doe", passwordEncoder.encode("123"), Role.USER);
         userRepository.saveAll(List.of(user1, user2));
 
         // Нитки

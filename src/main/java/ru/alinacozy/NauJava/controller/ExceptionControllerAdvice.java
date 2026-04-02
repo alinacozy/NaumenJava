@@ -2,12 +2,11 @@ package ru.alinacozy.NauJava.controller;
 
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import ru.alinacozy.NauJava.dto.ExceptionDTO;
 
 @ControllerAdvice
@@ -42,6 +41,13 @@ public class ExceptionControllerAdvice
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ExceptionDTO handleNoHandlerFound(org.springframework.web.servlet.NoHandlerFoundException e) {
         return ExceptionDTO.create(404, "Страница не найдена. Проверьте правильность URL: " + e.getRequestURL());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ExceptionDTO handleAccessDenied(AccessDeniedException e) {
+        return ExceptionDTO.create(403, "У вас недостаточно прав для доступа к этому ресурсу. Требуется роль ADMIN.");
     }
 
 }
