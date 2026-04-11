@@ -5,9 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import ru.alinacozy.NauJava.entity.Role;
 import ru.alinacozy.NauJava.entity.User;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @SpringBootTest
@@ -31,16 +32,15 @@ class UserTest {
 
         User user = new User();
         user.setUsername(username);
-        user.setRole("USER");
+        user.setRole(Role.USER);
         userRepository.save(user);
 
         // Поиск по имени пользователя
-        List<User> found = userRepository.findByUsername(username);
+        Optional<User> found = userRepository.findByUsername(username);
 
         // Проверки
-        Assertions.assertNotNull(found);
-        Assertions.assertEquals(1, found.size());
-        Assertions.assertEquals(username, found.getFirst().getUsername());
-        Assertions.assertEquals("USER", found.getFirst().getRole());
+        Assertions.assertTrue(found.isPresent());
+        Assertions.assertEquals(username, found.get().getUsername());
+        Assertions.assertEquals(Role.USER, found.get().getRole());
     }
 }

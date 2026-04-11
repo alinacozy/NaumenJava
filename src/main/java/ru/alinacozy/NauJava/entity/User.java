@@ -19,7 +19,11 @@ public class User {
     private String username;
 
     @Column(nullable = false)
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Column(nullable = false)
+    private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
@@ -30,8 +34,9 @@ public class User {
 
     public User() {}
 
-    public User(String username, String role) {
+    public User(String username, String password, Role role) {
         this.username = username;
+        this.password = password;
         this.role = role;
     }
 
@@ -51,11 +56,11 @@ public class User {
         this.username = username;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
@@ -73,5 +78,13 @@ public class User {
 
     public void setInventory(List<Inventory> inventory) {
         this.inventory = inventory;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
