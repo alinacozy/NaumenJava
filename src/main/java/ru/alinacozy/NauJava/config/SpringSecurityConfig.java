@@ -27,7 +27,9 @@ public class SpringSecurityConfig
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
     {
-        http.authorizeHttpRequests((authz) -> authz
+        // отключаем csrf- защиту для reports, чтобы тестировать вне браузера
+        http.csrf(csrf -> csrf.ignoringRequestMatchers("/reports/**"))
+                .authorizeHttpRequests((authz) -> authz
                         .requestMatchers("/registration", "/login", "/logout")
                         .permitAll()
                         .requestMatchers(
@@ -35,7 +37,8 @@ public class SpringSecurityConfig
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**",
                                 "/swagger-resources/**",
-                                "/webjars/**"
+                                "/webjars/**",
+                                "/reports/**"
                         ).hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(form -> form
@@ -44,6 +47,8 @@ public class SpringSecurityConfig
                         .defaultSuccessUrl("/custom/floss/view/list", true)
                         .permitAll()
                 )
+                // для тестирования запросов к API через curl/postman
+                .httpBasic(httpBasic -> {})
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
