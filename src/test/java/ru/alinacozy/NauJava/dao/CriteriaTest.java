@@ -43,7 +43,7 @@ class CriteriaTest {
         // Создаем пользователя
         User user = new User();
         user.setUsername(UUID.randomUUID().toString());
-        user.setRole("USER");
+        user.setRole(Role.USER);
         userRepository.save(user);
 
         // Создаем проекты
@@ -77,7 +77,7 @@ class CriteriaTest {
         // Создаем пользователя
         User user = new User();
         user.setUsername(UUID.randomUUID().toString());
-        user.setRole("USER");
+        user.setRole(Role.USER);
         userRepository.save(user);
 
         // Создаем проект
