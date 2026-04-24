@@ -28,6 +28,9 @@ public class ProjectController {
     @GetMapping("/findByUserIdAndProjectName")
     public List<Project> findByUserIdAndProjectName(@RequestParam Long userId, @RequestParam String projectName)
     {
+        if (projectName.isEmpty()){
+            return List.of();
+        }
         return projectRepository.findByUserIdAndProjectNameContainingIgnoreCase(userId, projectName);
     }
 
