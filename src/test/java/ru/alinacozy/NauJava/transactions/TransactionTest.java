@@ -45,7 +45,7 @@ class TransactionTest {
         // Создаем пользователя
         User user = new User();
         user.setUsername(UUID.randomUUID().toString());
-        user.setRole("USER");
+        user.setRole(Role.USER);
         userRepository.save(user);
 
         // Создаем проект
@@ -96,7 +96,7 @@ class TransactionTest {
         // Создаем пользователя
         User user = new User();
         user.setUsername(UUID.randomUUID().toString());
-        user.setRole("USER");
+        user.setRole(Role.USER);
         userRepository.save(user);
 
         // Создаем проект

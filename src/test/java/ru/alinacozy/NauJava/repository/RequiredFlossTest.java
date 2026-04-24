@@ -37,7 +37,7 @@ class RequiredFlossTest {
     private User createTestUser() {
         User user = new User();
         user.setUsername(UUID.randomUUID().toString());
-        user.setRole("USER");
+        user.setRole(Role.USER);
         return userRepository.save(user);
     }
 

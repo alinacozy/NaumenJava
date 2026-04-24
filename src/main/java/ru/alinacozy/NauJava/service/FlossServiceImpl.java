@@ -1,6 +1,7 @@
 package ru.alinacozy.NauJava.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alinacozy.NauJava.entity.Floss;
@@ -35,7 +36,9 @@ public class FlossServiceImpl implements FlossService{
     @Override
     public Floss findByBrandAndNumber(String brand, String number) {
         return flossRepository.findByBrandAndColorNumber(brand, number)
-                .orElse(null);
+                .orElseThrow(() -> new ResourceNotFoundException(
+                "Floss not found with brand: " + brand + " and number: " + number
+        ));
     }
 
     @Override
@@ -73,6 +76,12 @@ public class FlossServiceImpl implements FlossService{
 
         // Если точного нет, ищем ближайший
         List<Floss> candidates = flossRepository.findAll();
+
+        // проверяем, что БД не пуста
+        if (candidates.isEmpty()) {
+            throw new IllegalStateException("Floss database is empty. Cannot find colors.");
+        }
+
         return findClosestByColor(red, green, blue, candidates);
     }
 
@@ -84,6 +93,10 @@ public class FlossServiceImpl implements FlossService{
         List<Floss> candidates = flossRepository.findAll().stream()
                 .filter(f -> !f.getId().equals(original.getId()))  // исключаем исходную
                 .collect(Collectors.toList());
+
+        if (candidates.isEmpty()) {
+            throw new IllegalStateException("Floss database contain only one floss. Cannot find similar.");
+        }
 
         return findClosestByColor(original.getRed(), original.getGreen(), original.getBlue(), candidates);
     }

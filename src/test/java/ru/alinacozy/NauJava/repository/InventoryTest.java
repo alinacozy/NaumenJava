@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alinacozy.NauJava.entity.Inventory;
+import ru.alinacozy.NauJava.entity.Role;
 import ru.alinacozy.NauJava.entity.User;
 import ru.alinacozy.NauJava.entity.Floss;
 
@@ -38,7 +39,7 @@ class InventoryTest {
         // Создаем пользователя
         User user = new User();
         user.setUsername(UUID.randomUUID().toString());
-        user.setRole("USER");
+        user.setRole(Role.USER);
         userRepository.save(user);
 
         // Создаем нитку
@@ -75,7 +76,7 @@ class InventoryTest {
         // Создаем пользователя
         User user = new User();
         user.setUsername(UUID.randomUUID().toString());
-        user.setRole("USER");
+        user.setRole(Role.USER);
         userRepository.save(user);
 
         // Создаем нитку
